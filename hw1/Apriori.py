@@ -21,18 +21,15 @@ class Apriori:
         self.main()
 
     def main(self):
-        first_candidate = self.create_first_candidate(self._filename, self._min_sup)
+        first_candidate, self.k = self.create_first_candidate(self._filename, self._min_sup, self.k)
         self.Candidates.append(first_candidate)
 
         self.create_k_candidate(self._filename, self._min_sup, self.Candidates, self.k)
 
 
-
-
-
-    def create_first_candidate(self,filename, min_sup):
+    def create_first_candidate(self,filename, min_sup, k):
         freq = Candidate()
-        freq.k = self.k
+        freq.k = k
         freq.min_sup = min_sup
         freq.name = str(freq.k) + "-candidate" #this is to set the name so it's easy to track later.
         with open(filename, 'r') as file:
@@ -46,24 +43,33 @@ class Apriori:
                     else:
                         freq.candidates[item] = int(freq.candidates.get(item)) + 1
         freq.item_sets, freq.candidates = self.pruning(freq.candidates, freq.item_sets, freq.min_sup)
-        self.k += 1 #increment k since first candidate is already created.
-        # print(freq.item_sets)
-        # print(freq.candidates)
-        return freq
+        freq.k += 1 #increment k since first candidate is already created.
+        #print(freq.item_sets)
+        #print(freq.candidates)
+        return freq, freq.k
 
     def pruning(self, candidates, item_sets, min_sup):
         for item in list(candidates):
             if candidates.get(item) < min_sup:
-                item_sets.remove(item)
+                if len(item) > 1:
+                    temp_item = list(item)
+                else:
+                    temp_item = item
+                item_sets.remove(temp_item)
                 del candidates[item]
         return item_sets, candidates
 
-    def create_k_candidate(self, filename, min_sup, candidates, k):
+    def create_k_candidate(self, filename, min_sup, candidateObjects, k):
         freq = Candidate()
-        freq.k = self.k
+        freq.k = k
         freq.min_sup = min_sup
         freq.name = str(freq.k) + "-candidate"
-        freq.item_sets = combinations(candidates[k-2].item_sets, k)
+
+        #combinations
+        combs = combinations(candidateObjects[k-2].item_sets, freq.k)
+        #convert combinations to list
+        for comb in combs:
+            freq.item_sets.append(list(comb))
 
         # ('a', 'c')
         # ('a', 'b')
@@ -72,47 +78,48 @@ class Apriori:
         # ('c', 'e')
         # ('b', 'e')
 
-        with open(filename,'r') as file:
+        lines = []
+        with open(filename, 'r') as file:
             for line in file:
-                temp_line = line.strip('\n').split(',')
-                for comb in freq.item_sets:
-                    item_name = str.join('',list(comb))
-                    item_list = list(comb)
-                    #print(item_list)
-                    print(set(item_list).issubset(temp_line))
-                    test = set(item_list).issubset(temp_line)
-                    print(item_list)
-                    if set(item_list).issubset(temp_line):
+                lines.append(line.strip('\n').split(','))
+
+
+        for comb in freq.item_sets:
+            item_name = str.join('',list(comb))
+            #item_list = list(comb)
+            for line in lines:
+                #print(line)
+                #print(item_list)
+                #print(set(item_list).issubset(line))
+                if set(comb).issubset(line):
+                    if item_name not in freq.candidates:
                         freq.candidates[item_name] = freq.support
-
-                        #why does it stop??
-
-                    # for item in comb:
-                    #     print(comb)
-                    #     if item in temp_line:
-                    #         print(temp_line)
-                    #         print(item + ' in')
-                    #
-                    #         if counter < k-1:
-                    #             print('count ' + str(counter))
-                    #             counter += 1
-                    #         else:
-                    #             counter = 0
-                    #             print('add to candidates')
-                    #             freq.candidates[item_name] = freq.support
-
-                            # if counter == k-1:
-                            #     print('add to candidates')
-                            #     freq.candidates[item_name] = freq.support
-                            # else:
-                            #     print('count ' + str(counter))
-                            #     counter += 1
-                            #     print(counter)
-        print(freq.candidates)
+                    else:
+                        freq.candidates[item_name] = int(freq.candidates.get(item_name)) + 1
+        freq.item_sets, freq.candidates = self.pruning(freq.candidates, freq.item_sets, freq.min_sup)
+        freq.k += 1
+        #print(freq.candidates)
+        #print(freq.item_sets)
 
 
+        #check if we can do next k itemset
+        print(freq.item_sets)
+        test = combinations(candidateObjects[k - 2].item_sets, 5)
+
+        if test == None:
+            print('none')
+
+        test1 = combinations(freq.item_sets, 3)
+
+        for x in test:
+            print(x)
 
 
+        # for x in test1:
+        #     print(x)
+
+
+        return freq
 
 
 
