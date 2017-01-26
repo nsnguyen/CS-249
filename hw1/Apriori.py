@@ -3,7 +3,6 @@ from itertools import combinations
 
 class Candidate:
     def __init__(self):
-        self.name = 0
         self.item_sets = []
         self.candidates = {}
         self.min_sup = 0
@@ -15,9 +14,7 @@ class Apriori:
         self._filename = filename
         self._min_sup = min_sup
         self.Candidates = []
-        self._frequentItemSets = {}
-        self._keepLooping = True
-        self.k = 1 #this is to set k itemsetl
+        self.k = 1
         self.main()
 
     def main(self):
@@ -28,9 +25,9 @@ class Apriori:
             if len(_candidate.item_sets) == 0 or len(_candidate.candidates) == 0:
                 break
             self.Candidates.append(_candidate)
-        self.PrintToScreen(self.Candidates)
+        self.print_outputs(self.Candidates)
 
-    def PrintToScreen(self,list_of_candidates):
+    def print_outputs(self,list_of_candidates):
         for candidate in list_of_candidates:
             for item in candidate.candidates:
                 print(item, ':', candidate.candidates[item])
@@ -40,7 +37,6 @@ class Apriori:
         freq = Candidate()
         freq.k = k
         freq.min_sup = min_sup
-        freq.name = str(freq.k) + "-candidate" #this is to set the name so it's easy to track later.
         with open(filename, 'r') as file:
             for line in file:
                 temp_line = line.strip('\n').split(',')
@@ -53,8 +49,6 @@ class Apriori:
                         freq.candidates[item] = int(freq.candidates.get(item)) + 1
         freq.item_sets, freq.candidates = self.pruning(freq.candidates, freq.item_sets, freq.min_sup)
         freq.k += 1 #increment k since first candidate is already created.
-        #print(freq.item_sets)
-        #print(freq.candidates)
         return freq, freq.k
 
     def pruning(self, candidates, item_sets, min_sup):
@@ -72,7 +66,6 @@ class Apriori:
         freq = Candidate()
         freq.k = k
         freq.min_sup = min_sup
-        freq.name = str(freq.k) + "-candidate"
 
         #combinations
         combs = combinations(candidateObjects[0].item_sets, freq.k)
@@ -95,9 +88,6 @@ class Apriori:
                         freq.candidates[item_name] = int(freq.candidates.get(item_name)) + 1
         freq.item_sets, freq.candidates = self.pruning(freq.candidates, freq.item_sets, freq.min_sup)
         freq.k += 1
-        #print(freq.candidates)
-        #print(freq.item_sets)
-
         return freq, freq.k
 
 
