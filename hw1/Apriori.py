@@ -1,5 +1,5 @@
 import csv
-from itertools import combinations, chain
+from itertools import combinations
 
 class Candidate:
     def __init__(self):
@@ -10,21 +10,30 @@ class Candidate:
         self.support = 1
         self.k = 1
 
-
 class Apriori:
     def __init__(self, filename, min_sup):
         self._filename = filename
         self._min_sup = min_sup
         self.Candidates = []
         self._frequentItemSets = {}
+        self._keepLooping = True
         self.k = 1 #this is to set k itemsetl
         self.main()
 
     def main(self):
-        first_candidate, self.k = self.create_first_candidate(self._filename, self._min_sup, self.k)
-        self.Candidates.append(first_candidate)
+        _candidate, self.k = self.create_first_candidate(self._filename, self._min_sup, self.k)
+        self.Candidates.append(_candidate)
+        while(True):
+            _candidate, self.k = self.create_k_candidate(self._filename, self._min_sup, self.Candidates, self.k)
+            if len(_candidate.item_sets) == 0 or len(_candidate.candidates) == 0:
+                break
+            self.Candidates.append(_candidate)
+        self.PrintToScreen(self.Candidates)
 
-        self.create_k_candidate(self._filename, self._min_sup, self.Candidates, self.k)
+    def PrintToScreen(self,list_of_candidates):
+        for candidate in list_of_candidates:
+            for item in candidate.candidates:
+                print(item, ':', candidate.candidates[item])
 
 
     def create_first_candidate(self,filename, min_sup, k):
@@ -66,31 +75,19 @@ class Apriori:
         freq.name = str(freq.k) + "-candidate"
 
         #combinations
-        combs = combinations(candidateObjects[k-2].item_sets, freq.k)
+        combs = combinations(candidateObjects[0].item_sets, freq.k)
+
         #convert combinations to list
         for comb in combs:
             freq.item_sets.append(list(comb))
-
-        # ('a', 'c')
-        # ('a', 'b')
-        # ('a', 'e')
-        # ('c', 'b')
-        # ('c', 'e')
-        # ('b', 'e')
-
         lines = []
         with open(filename, 'r') as file:
             for line in file:
                 lines.append(line.strip('\n').split(','))
 
-
         for comb in freq.item_sets:
             item_name = str.join('',list(comb))
-            #item_list = list(comb)
             for line in lines:
-                #print(line)
-                #print(item_list)
-                #print(set(item_list).issubset(line))
                 if set(comb).issubset(line):
                     if item_name not in freq.candidates:
                         freq.candidates[item_name] = freq.support
@@ -101,35 +98,11 @@ class Apriori:
         #print(freq.candidates)
         #print(freq.item_sets)
 
-
-        #check if we can do next k itemset
-        print(freq.item_sets)
-        test = combinations(candidateObjects[k - 2].item_sets, 5)
-
-        if test == None:
-            print('none')
-
-        test1 = combinations(freq.item_sets, 3)
-
-        for x in test:
-            print(x)
-
-
-        # for x in test1:
-        #     print(x)
-
-
-        return freq
-
-
-
-
-
-
-
+        return freq, freq.k
 
 
 if __name__ == "__main__":
     filename = "test.csv"
     min_sup = 2
     apriori = Apriori(filename, min_sup)
+    input("Press Enter Key to Continue")
