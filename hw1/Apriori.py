@@ -92,7 +92,15 @@ class Apriori:
 
 
 if __name__ == "__main__":
-    filename = "test.csv"
+    #filename = "test.csv"
+    filename = input("Enter the file name with extension. For example, test.csv or test.txt\n")
     min_sup = 2
-    apriori = Apriori(filename, min_sup)
+    min_sup = input("Enter the minimum support.\n")
+    try:
+        min_sup = int(min_sup)
+        apriori = Apriori(filename, min_sup)
+    except FileNotFoundError:
+        print("filename error.")
+    except ValueError:
+        print("min_sup is not numeric.")
     input("Press Enter Key to Continue")
