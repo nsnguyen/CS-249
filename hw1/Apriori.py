@@ -107,4 +107,4 @@ if __name__ == "__main__":
         print("filename error.")
     except ValueError:
         print("min_sup is not numeric.")
-    input("Press Enter Key to Continue")
+    end = input("Press Enter Key to Continue")
