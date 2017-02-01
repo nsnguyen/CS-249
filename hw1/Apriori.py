@@ -1,4 +1,5 @@
 import csv
+import inspect, os
 from itertools import combinations
 
 class Candidate:
@@ -92,13 +93,16 @@ class Apriori:
 
 
 if __name__ == "__main__":
-    #filename = "test.csv"
-    filename = input("Enter the file name with extension. For example, test.csv or test.txt\n")
-    min_sup = 2
+    filename = inspect.getframeinfo(inspect.currentframe()).filename
+    path = os.path.dirname(os.path.abspath(filename)) + '/'
+    csv_file_name = "run_file.csv"
+    #filename = input("Enter the file name with extension. For example, test.csv or test.txt\n")
+    print("Make sure that your input file is name run_file.csv and is in the same folder as Apriori.py script.")
     min_sup = input("Enter the minimum support.\n")
+    print("Outputs:")
     try:
         min_sup = int(min_sup)
-        apriori = Apriori(filename, min_sup)
+        apriori = Apriori(path + csv_file_name, min_sup)
     except FileNotFoundError:
         print("filename error.")
     except ValueError:
