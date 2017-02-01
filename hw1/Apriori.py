@@ -31,7 +31,7 @@ class Apriori:
     def print_outputs(self,list_of_candidates):
         for candidate in list_of_candidates:
             for item in candidate.candidates:
-                print(item, ':', candidate.candidates[item])
+                print(str(item) + ' : ' + str(candidate.candidates[item]))
 
 
     def create_first_candidate(self,filename, min_sup, k):
