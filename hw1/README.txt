@@ -13,9 +13,11 @@ To run this script, the user can run it on an IDE (if the Python intepreter is s
 
 For example, in windows or MacOS, the user can type: C:\python <Apriori.py location>.
 
-Assumptions: File name is static and set it as run_file.csv. File contains only single alphabet character in ascending order (though it doesn't matter) and is comma separated value.
+Assumptions: File name is static and set it as run_file.csv. Make sure the run_file.csv is in the same folder as Apriori.py script. If the run_file.csv is not there, it will throw an error and terminate.
 
-In the beginning, the script will prompt the user to input the minimum support. If the user does not enter a numeric value, then the script will return a response and terminate.
+File contains only single alphabet character in ascending order (though it doesn't matter) and is comma separated value.
+
+In the beginning, the script will prompt the user to input the minimum support. If the user does not enter a numeric value, then the script will throw an error and terminate.
 If the user inputs valid min_sup value, the script then initialize the Apriori class and go through the calculation. It will calculate frequent k-temsets basing on the provided file and min_sup.
 
 Development: The script was developed using Pycharm and uses csv and itertools package from standard Python Libraries.
