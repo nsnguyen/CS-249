@@ -84,7 +84,7 @@ importance_features = {}
 for column_id,feat_importance in enumerate(rf.feature_importances_):
     importance_features[names.get(column_id)] = feat_importance    
 print(sorted(((v,k) for k,v in importance_features.items()),reverse=True) )
-##End RandomForestClassifier ##################################################
+##End Random Forest ############################################################
 
       
 ###############################################################################
@@ -121,6 +121,7 @@ for name, est in estimators_Kmeans.items():
     ax.set_ylabel('Proline')
     ax.set_zlabel('Color Intensity')
     fignum = fignum + 1
+    plt.show()
 
 
 ################################################################################
@@ -157,7 +158,8 @@ for name, est in estimators_Birch.items():
     ax.set_ylabel('Proline')
     ax.set_zlabel('Color Intensity')
     fignum = fignum + 1
-    
+    plt.show()
+
     
 
 ################################################################################
@@ -194,6 +196,7 @@ for name, est in estimators_AgglomerativeClustering.items():
     ax.set_ylabel('Proline')
     ax.set_zlabel('Color Intensity')
     fignum = fignum + 1
+    plt.show()
     
 
 ################################################################################
@@ -203,6 +206,7 @@ X = wine_df[["Proline","Flavanoids","Color Intensity"]].as_matrix()
 
 estimators_DBSCAN= {'DBSCAN_5': DBSCAN(eps=20,metric='euclidean', min_samples=5)
                     #'DBSCAN_1': DBSCAN(eps=10,metric='euclidean', min_samples=5)
+
 
                     }
 
@@ -218,6 +222,7 @@ for name, est in estimators_DBSCAN.items():
     stop = timeit.default_timer()
     
     print (stop - start )
+    
     
     labels = est.labels_
     
@@ -235,9 +240,40 @@ for name, est in estimators_DBSCAN.items():
     ax.set_ylabel('Proline')
     ax.set_zlabel('Flavanoids')
     fignum = fignum + 1
+    plt.show()
     
     
+fignum = 1
+for name, est in estimators_DBSCAN.items():
+    print('Running ' + name)
+    fig = plt.figure(fignum, figsize=None)
+    plt.clf()
+    ax = Axes3D(fig)
+    plt.cla()  
+    start = timeit.default_timer()
+    est.fit(X)
+    stop = timeit.default_timer()
     
+    print (stop - start )
+    
+    
+    labels = est.labels_
+    
+    # Number of clusters in labels, ignoring noise if present.
+    n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+    
+    print('Estimated number of clusters: %d' % n_clusters_)
+
+    ax.scatter(X[:, 1], X[:, 0], X[:, 2], c=labels.astype(np.float))
+
+    ax.w_xaxis.set_ticklabels([])
+    ax.w_yaxis.set_ticklabels([])
+    ax.w_zaxis.set_ticklabels([])
+    ax.set_xlabel('Color Intensity')
+    ax.set_ylabel('Proline')
+    ax.set_zlabel('Flavanoids')
+    fignum = fignum + 1
+    plt.show()   
     
     
     
