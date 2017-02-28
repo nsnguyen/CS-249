@@ -1,7 +1,4 @@
-from sklearn.cross_validation import ShuffleSplit
-from sklearn.metrics import r2_score
-from collections import defaultdict
-from sklearn.ensemble import RandomForestRegressor
+
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 import numpy as np
@@ -12,9 +9,6 @@ from sklearn.cluster import Birch
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.cluster import DBSCAN
 import timeit
-from sklearn import metrics
-from sklearn.datasets.samples_generator import make_blobs
-from sklearn.preprocessing import StandardScaler
 
 
 #import data###########################################
