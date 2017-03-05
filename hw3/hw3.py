@@ -51,7 +51,12 @@ class CAM:
             obj.Node1 = str(edge[0]).strip()
             obj.Node2 = str(edge[1]).strip()
             obj.Edge = str(edge[2]).strip()
+            obj1 = Edge()  # there's gotta be a better implementation but no time to fix it...
+            obj1.Node1 = str(edge[1]).strip()
+            obj1.Node2 = str(edge[0]).strip()
+            obj1.Edge = str(edge[2]).strip()
             edge_dict.setdefault(obj.Node1,[]).append(obj)  # add obj to dictionary so it can be found easily.
+            edge_dict.setdefault(obj1.Node1,[]).append(obj1)
 
         # sort the unique vertices
         vertices = sorted(vertices) # python sort by lexicographic order by default. See python documentation
@@ -73,29 +78,36 @@ class CAM:
                 node1 = matrix[y][y]
                 if x == y:
                     break
-                #print( x, y, node1, node2)
                 if node1 in edge_dict:
                     for item in edge_dict[node1]:
                         if node2 == item.Node2:
                             matrix[x][y] = item.Edge
-        CamCode = ''
-        #getting awesome Code
-        for row in matrix:
-            for column in row:
-                if column == 0:
-                    continue
-                CamCode += column
 
-        # for y in matrix:
-        #     print(y)
-        # print(CamCode)
+        # getting awesome Code
+        CamCode = ''
+        for x in range(0, unique_nodes):
+            for y in range(0,unique_nodes):
+                if y <= x:
+                    CamCode += str(matrix[x][y])
         return matrix, CamCode
 
     def generateCAM(self,cam1, cam2):
-        join_cams = []
+        left_cam = cam1
+        right_cam = cam2
+        left_cam_count = left_cam.__len__()
+        right_cam_count = right_cam.__len__()
+        result_join_matrix = []
+        case = 0 # initialize case 0 at beginning
 
 
-        return join_cams
+
+
+        print(left_cam.__len__())
+
+        print(cam1[3] == cam2[3])
+
+        return result_join_matrix
+
 
 
 
@@ -103,15 +115,39 @@ class CAM:
 if __name__ == "__main__":
     filename = inspect.getframeinfo(inspect.currentframe()).filename
     path = os.path.dirname(os.path.abspath(filename)) + '/'
-    cam1 = [
-                ['B','C',2], ['A','B',1], ['A','C',3] ,[5,1,'X'], [1,5,'G']
+    graph1 = [
+            ['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['C', 'D', 'X'], ['D', 'A', 'X']
+              ]
+
+    graph2 = [
+            ['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3] ,['C','D','X'] , ['D','B','X']
               ]
 
     cam = CAM()
-    result_matrix, result_code = cam.convertToMatrix(cam1)
 
-    for x in result_matrix:
+    result_matrix1, result_code1 = cam.convertToMatrix(graph1)
+
+    print("Graph1:")
+    for x in result_matrix1:
         print(x)
 
-    print('The resulting code for the 2d matrix above is: ' + result_code)
+    print('The resulting code for the 2d matrix above is: ' + result_code1)
+
+    print('\n')
+
+    result_matrix2, result_code2 = cam.convertToMatrix(graph2)
+
+    print("Graph2:")
+    for x in result_matrix2:
+        print(x)
+
+    print('The resulting code for the 2d matrix above is: ' + result_code2)
+
+    result_matrix3 = cam.generateCAM(result_matrix1, result_matrix2)
+
+    # for x in result_matrix3:
+    #     print(x)
+
+
+
 
