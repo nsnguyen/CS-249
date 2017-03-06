@@ -172,10 +172,6 @@ class CAM:
         if case == 1:
             case_used = 'Using Case 1:'
 
-            # # add submatrix to result.
-            # for row in cam1_matrix[:core_size_length - 1]:
-            #     result_combined_CAM.append(row)
-
             temp_row = []
             # add last row to result.
             # if last node is same node so this must means that the two matrix are the same size, because the nodes are unique.
@@ -200,9 +196,9 @@ class CAM:
                 # add matrix 1 to temp dict so it can be used in iteration below...
                 temp_dict_cam1 = {}
                 temp_dict_cam2 = {}
-                for x in range(0,core_size_length):
+                for x in range(0,core_size_length-1):
                     temp_dict_cam1[cam1_matrix[x][x]] = cam1_matrix[x]
-                for x in range(0, core_size_length):
+                for x in range(0, core_size_length-1):
                     temp_row = []
                     count = 0
                     for y in cam2_matrix[x]:
@@ -220,7 +216,9 @@ class CAM:
                     result_combined_CAM.append(temp_row)
 
                 #add unexisted node back in
-                for x in range(core_size_length,len(cam2_matrix)):
+                for x in range(core_size_length -1,len(cam1_matrix)):
+                    temp_dict_cam2[cam1_matrix[x][x]] = cam1_matrix[x]
+                for x in range(core_size_length -1,len(cam2_matrix)):
                     temp_dict_cam2[cam2_matrix[x][x]] = cam2_matrix[x]
 
 
@@ -335,10 +333,10 @@ class CAM:
 
         # getting awesome Code
         CamCode = ''
-        for x in range(0, len(result_combined_CAM)):
-            for y in range(0,len(result_combined_CAM)):
-                if y <= x:
-                    CamCode += str(result_combined_CAM[x][y])
+        # for x in range(0, len(result_combined_CAM)):
+        #     for y in range(0,len(result_combined_CAM)):
+        #         if y <= x:
+        #             CamCode += str(result_combined_CAM[x][y])
 
         return case_used, result_combined_CAM, CamCode
 
@@ -376,14 +374,14 @@ if __name__ == "__main__":
     #           ]
 
     #
-    # #case 1.2
-    # graph1 = [
-    #     ['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D', 'B', 'X'], ['D', 'C', 'X'], ['B', 'F', 'X'], ['F', 'A', 'Y']
-    #           ]
-    #
-    # graph2 = [
-    #     ['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D', 'B', 'X'], ['D', 'C', 'X'], ['B', 'E', 'X'], ['E', 'A', 'Y']
-    #           ]
+    #case 1.2
+    graph1 = [
+        ['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D', 'B', 'X'], ['D', 'C', 'X'], ['B', 'F', 'X'], ['F', 'A', 'Y']
+              ]
+
+    graph2 = [
+        ['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D', 'B', 'X'], ['D', 'C', 'X'], ['B', 'E', 'X'], ['E', 'A', 'Y']
+              ]
 
 
     # #case 2
