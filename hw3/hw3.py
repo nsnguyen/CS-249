@@ -124,9 +124,6 @@ class CAM:
 
         # If Both A and B have at least two edge entries in last row
         if cam1_last_row_edge_count >= 2 and cam2_last_row_edge_count >= 2:
-
-            #print(len(cam1_matrix))
-            #print(len(cam2_matrix))
             # If both sub matrix are the same
             temp_code_cam1 = ''
             temp_code_cam2 = ''
@@ -144,9 +141,17 @@ class CAM:
                 result_combined_CAM.append(result)
 
         # If A has at least two edge entries in last row but B only has one
-        elif cam1_last_row_edge_count >= 2 and cam2_last_row_edge_count == 1:
+        elif (cam1_last_row_edge_count >= 2 or cam2_last_row_edge_count >= 2) and (cam2_last_row_edge_count == 1 or cam1_last_row_edge_count == 1):
             # If both sub matrix are the same
-            if cam1_matrix[:core_size_length - 1] == cam2_matrix[:core_size_length - 1]:
+            temp_code_cam1 = ''
+            temp_code_cam2 = ''
+            for x in range(0,core_size_length-1):
+                for y in range(0,core_size_length-1):
+                    if y <= x:
+                        temp_code_cam1 += cam1_matrix[x][y]
+                        temp_code_cam2 += cam2_matrix[x][y]
+
+            if temp_code_cam1 == temp_code_cam2:
                 case = 2  # set as case 2
             else:
                 # return empty array if sub matrix is not the same.
@@ -166,47 +171,41 @@ class CAM:
 
         #print(case)
 
-        if case == 1:
-            print('Using Case 1:')
+        if __name__ == '__main__':
+            if case == 1:
+                print('Using Case 1:')
 
-            # add submatrix to result.
-            for row in cam1_matrix[:core_size_length - 1]:
-                result_combined_CAM.append(row)
+                # add submatrix to result.
+                for row in cam1_matrix[:core_size_length - 1]:
+                    result_combined_CAM.append(row)
 
-            temp_row = []
-            # add last row to result.
-            # if last node is same node so this must means that the two matrix are the same size, because the nodes are unique.
-            if str(cam1_matrix[len(cam1_matrix) - 1][len(cam1_matrix) - 1]) == str(cam2_matrix[len(cam2_matrix) - 1][len(cam2_matrix) - 1]):
-                for x in range(0, len(cam1_matrix)):
-                    if str(cam1_matrix[len(cam1_matrix) - 1][x]) != "0":
-                        temp_row.append(cam1_matrix[len(cam1_matrix) - 1][x])
-                    elif str(cam1_matrix[len(cam1_matrix) - 1][x]) == "0":
-                        temp_row.append(cam2_matrix[len(cam2_matrix) -1][x])
-                result_combined_CAM.append(temp_row)
-            # else if last node is not the same, this means that the two matrix are not the same size but both last row still have at least 2 edges
-            else:
-                temp_dict = {}
-                for x in range(core_size_length - 1, len(cam1_matrix)):
-                    temp_dict[str(cam1_matrix[len(cam1_matrix) - 1][len(cam1_matrix) - 1])] = cam1_matrix[len(cam1_matrix) - 1]
+                temp_row = []
+                # add last row to result.
+                # if last node is same node so this must means that the two matrix are the same size, because the nodes are unique.
+                if str(cam1_matrix[len(cam1_matrix) - 1][len(cam1_matrix) - 1]) == str(cam2_matrix[len(cam2_matrix) - 1][len(cam2_matrix) - 1]):
+                    for x in range(0, len(cam1_matrix)):
+                        if str(cam1_matrix[len(cam1_matrix) - 1][x]) != "0":
+                            temp_row.append(cam1_matrix[len(cam1_matrix) - 1][x])
+                        elif str(cam1_matrix[len(cam1_matrix) - 1][x]) == "0":
+                            temp_row.append(cam2_matrix[len(cam2_matrix) -1][x])
+                    result_combined_CAM.append(temp_row)
+                # else if last node is not the same, this means that the two matrix are not the same size but both last row still have at least 2 edges
+                else:
+                    temp_dict = {}
+                    for x in range(core_size_length - 1, len(cam1_matrix)):
+                        temp_dict[str(cam1_matrix[len(cam1_matrix) - 1][len(cam1_matrix) - 1])] = cam1_matrix[len(cam1_matrix) - 1]
 
-                for y in range(core_size_length - 1, len(cam2_matrix)):
-                    if str(cam2_matrix[len(cam2_matrix) - 1][len(cam2_matrix) - 1]) not in temp_dict:
-                        temp_dict[str(cam2_matrix[len(cam2_matrix) - 1][len(cam2_matrix) - 1])] = cam2_matrix[len(cam2_matrix) - 1]
+                    for y in range(core_size_length - 1, len(cam2_matrix)):
+                        if str(cam2_matrix[len(cam2_matrix) - 1][len(cam2_matrix) - 1]) not in temp_dict:
+                            temp_dict[str(cam2_matrix[len(cam2_matrix) - 1][len(cam2_matrix) - 1])] = cam2_matrix[len(cam2_matrix) - 1]
+                    # add all all nodes to graph...
+                    for item in sorted(temp_dict):
+                        result_combined_CAM.append(temp_dict[item])
 
+            elif case == 2:
+                print('Using Case 2:')
 
-
-
-
-                # add all all nodes to graph...
-                for item in sorted(temp_dict):
-                    result_combined_CAM.append(temp_dict[item])
-
-
-
-        elif case == 2:
-            print('Using Case 2:')
-
-
+                #add submatrix (core) to result
 
 
 
@@ -251,16 +250,30 @@ if __name__ == "__main__":
     #           ]
 
 
-    # #case 1.1
+    ##case 1.1
+    graph1 = [
+            #['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D', 'A', 'X']
+             ['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3]
+              ]
+
+    graph2 = [
+            #['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3] ,['D','B','X']
+              ['A', 'B', 1], ['A', 'C', 3] ,['C','D','X'] , ['D','B','X']
+              ]
+
+
+    # #case 2
     # graph1 = [
     #         #['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D', 'A', 'X']
-    #          ['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3]
+    #          ['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['C', 'D', 'X']
     #           ]
     #
     # graph2 = [
     #         #['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3] ,['D','B','X']
-    #           ['A', 'B', 1], ['A', 'C', 3] ,['C','D','X'] , ['D','B','X']
+    #          ['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3] ,['C','D','X'] , ['D','B','X']
     #           ]
+
+
 
     cam = CAM()
 
