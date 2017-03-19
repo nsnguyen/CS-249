@@ -39,3 +39,19 @@ How to Run:
     In order to input other test codes, open the python script in textPad or an IDE.
     Go to the bottom where "__main__": is. Note that this is where the python will begin reading the code, similar how main function works in C++
     Replace graph1 and graph2 variables with array of 3-item arrays. Save the file and execute the script again in terminal, or run it in an IDE.
+
+
+    CAM 1:
+['A', 0, 0, 0, 0]
+['1', 'B', 0, 0, 0]
+['3', '2', 'C', 0, 0]
+[0, 'X', 'X', 'D', 0]
+[0, 'X', 'Y', 0, 'E']
+CAM Code: A1B32C0XXD0XY0E
+CAM 2:
+['A', 0, 0, 0, 0]
+['1', 'B', 0, 0, 0]
+['3', '2', 'C', 0, 0]
+[0, 'X', 'X', 'D', 0]
+['Y', 'X', 0, 0, 'E']
+The resulting code for
