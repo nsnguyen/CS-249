@@ -1,40 +1,9 @@
-#CS-249 HW 3
-
-# Implement a program that solves a general case of CAM.
-#
-# 1. Implement a function named convertToMatrix that takes in a array of edges and converts
-# it into a CAM adjacency matrix. Each edge will be represented as a 3-item list. ie: [0,1,'X']
-# will represent an edge from 0 to 1 with a value of X. ['B','C',2] will represent
-# an edge from 'B' to 'C' with a value of 2. You may assume the graph represented in
-# an undirected graph and each node is unique in the graph. The output of your program
-# must be 2D array or list in your language. In addition, the function must also print the
-# code equivalence of the adjacency matrix in string format.
-
-
-
-# 2. Implement a function called generateCAM that takes in two CAM adjacency matrix
-# representation you wrote in C1 that creates a new matrix using CAM to handle join case
-# 1 (Both A and B have at least two edge entries in the last row) and join case 2 (A has at
-# least two edge entries in last row but B has only one).
-# The output of your program must be 2D array or list in your language. If the join case
-# is not 1 or 2, output a blank 2D array or list.
-# The function must also print a string of the join case it matched. If the graph matches
-# join case 1, print "Case 1". If the graph matches join case 2, print "Case 2". If the graph
-# matches join case 3a, print "Case 3a". If the graph matches join case 3b, print "Case
-# 3b". Note you do not have to implement the actual functionality of case 3 join.
-
-
-import csv
-import inspect, os
-import itertools
-
 
 class Edge:
     def __init__(self):
         self.Node1 = "1"
         self.Node2 = "2"
         self.Edge = "X"
-
 
 
 class CAM:
@@ -91,9 +60,6 @@ class CAM:
                 if y <= x:
                     CamCode += str(matrix[x][y])
         return matrix, CamCode
-
-
-
 
 
     def generateCAM(self,cam1, cam2):
@@ -167,7 +133,7 @@ class CAM:
             if cam1_matrix[:core_size_length - 1] == cam2_matrix[:core_size_length - 1]:
                 # If last node for both matrix are the same
                 if str(cam1_matrix[len(cam1_matrix) - 1][len(cam1_matrix) - 1]) == str(cam2_matrix[len(cam2_matrix) - 1][len(cam2_matrix) - 1]):
-                    case_used = 'Case 3a: '
+                    case_used = 'Case 3a:'
                 elif str(cam1_matrix[len(cam1_matrix) - 1][len(cam1_matrix) - 1]) != str(cam2_matrix[len(cam2_matrix) - 1][len(cam2_matrix) - 1]):
                     case_used = 'Cannot join because it is not from the same Graph. '
             elif len(cam1_matrix) != len(cam2_matrix):
@@ -176,7 +142,6 @@ class CAM:
                 # return empty array if sub matrix is not the same
                 result = []
                 result_combined_CAM.append(result)
-
 
 
         if case == 1:
@@ -304,9 +269,6 @@ class CAM:
                 for item in sorted(temp_dict_cam2):
                     result_combined_CAM.append(temp_dict_cam2[item])
 
-
-
-
         # getting CAM Code
         CamCode = ''
         if case == 3:
@@ -325,110 +287,18 @@ class CAM:
 
 
 
-
-
-
-
 if __name__ == "__main__":
-    filename = inspect.getframeinfo(inspect.currentframe()).filename
-    path = os.path.dirname(os.path.abspath(filename)) + '/'
-
     cam = CAM()
 
-    # # # # #case 1 - Checked - 2 matrix different size, different last node
-    # graph1 = [['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D', 'B', 'X'], ['D', 'A', 'X']]
-    # graph2 = [['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D', 'B', 'X'], ['D', 'C', 'X'], ['B', 'E', 'X'], ['E', 'A', 'Y']]
-    #
-    # result_matrix1, result_code1 = cam.convertToMatrix(graph1)
-    # print("CAM 1:")
-    # for x in result_matrix1:
-    #     print(x)
-    # print('CAM Code: ' + result_code1)
-    # result_matrix2, result_code2 = cam.convertToMatrix(graph2)
-    # print("CAM 2:")
-    # for x in result_matrix2:
-    #     print(x)
-    # print('CAM Code: ' + result_code2)
-    # case, result, code = cam.generateCAM(result_matrix1, result_matrix2)
-    # print(case)
-    # for x in result:
-    #     print(x)
-    # print('Cam Code: ' + code)
-    # print('\n\n')
+    graph3 = [['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D', 'B', 'X'], ['D', 'C', 'X'], ['B', 'E', 'X'], ['E', 'C', 'Y']]
+    graph4 = [['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D', 'B', 'X'], ['D', 'C', 'X'], ['B', 'E', 'X'], ['E', 'A', 'Y']]
 
-    # #case 1.1 - Checked - 2 matrix same size, same last node
-    # graph3 = [['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D', 'B', 'X'], ['D', 'C', 'X'], ['B', 'E', 'X'], ['E', 'C', 'Y']]
-    # graph4 = [['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D', 'B', 'X'], ['D', 'C', 'X'], ['B', 'E', 'X'], ['E', 'A', 'Y']]
-    #
-    # result_matrix1, result_code1 = cam.convertToMatrix(graph3)
-    # print("CAM 1:")
-    # for x in result_matrix1:
-    #     print(x)
-    # print('CAM Code: ' + result_code1)
-    # result_matrix2, result_code2 = cam.convertToMatrix(graph4)
-    # print("CAM 2:")
-    # for x in result_matrix2:
-    #     print(x)
-    # print('The resulting code for the 2d matrix: ' + result_code2)
-    # case, result, code = cam.generateCAM(result_matrix1, result_matrix2)
-    # print(case)
-    # for x in result:
-    #     print(x)
-    # print('CAM Code: ' + code)
-    # print('\n\n')
-    #
-    ##case 1.2 - Checked - 2 matrix same size, different last node - add new node
-    graph5 = [['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D', 'B', 'X'], ['D', 'C', 'X'], ['B', 'F', 'X'], ['F', 'C', 'Y']]
-    graph6 = [['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D', 'B', 'X'], ['D', 'C', 'X'], ['B', 'E', 'X'], ['E', 'A', 'Y']]
-
-    # result_matrix1, result_code1 = cam.convertToMatrix(graph5)
-    # print("CAM 1:")
-    # for x in result_matrix1:
-    #     print(x)
-    # print('The resulting code for the 2d matrix: ' + result_code1)
-    # result_matrix2, result_code2 = cam.convertToMatrix(graph6)
-    # print("CAM 2:")
-    # for x in result_matrix2:
-    #     print(x)
-    # print('The resulting code for the 2d matrix: ' + result_code2)
-    # case, result, code = cam.generateCAM(result_matrix1, result_matrix2)
-    # print(case)
-    # for x in result:
-    #     print(x)
-    # print('The resulting CAM Code for the two joined matrix: ' + code)
-    # print('\n\n')
-    # #
-    # #case 2 - Checked - 2 matrix  same size , same last node
-    # graph7 = [['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D','A','X']]
-    # graph8 = [['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3] ,['C','D','X'] , ['D','B','X']]
-    #
-    # result_matrix1, result_code1 = cam.convertToMatrix(graph7)
-    # print("CAM 1:")
-    # for x in result_matrix1:
-    #     print(x)
-    # print('The resulting code for the 2d matrix: ' + result_code1)
-    # result_matrix2, result_code2 = cam.convertToMatrix(graph8)
-    # print("CAM 2:")
-    # for x in result_matrix2:
-    #     print(x)
-    # print('The resulting code for the 2d matrix: ' + result_code2)
-    # case, result, code = cam.generateCAM(result_matrix1, result_matrix2)
-    # print(case)
-    # for x in result:
-    #     print(x)
-    # print('The resulting CAM Code for the two joined matrix: ' + code)
-    # print('\n\n')
-
-    # # #case 2.1 - Checked - 2 matrix different size, different last node
-    graph9 = [['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D','A','X']]
-    graph10 = [['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3] ,['C','D','X'] , ['D','B','X'], ['E', 'A', 'Y'], ['E', 'B', 'Y']]
-
-    result_matrix1, result_code1 = cam.convertToMatrix(graph9)
+    result_matrix1, result_code1 = cam.convertToMatrix(graph3)
     print("CAM 1:")
     for x in result_matrix1:
         print(x)
-    print('The resulting code for the 2d matrix: ' + result_code1)
-    result_matrix2, result_code2 = cam.convertToMatrix(graph10)
+    print('CAM Code: ' + result_code1)
+    result_matrix2, result_code2 = cam.convertToMatrix(graph4)
     print("CAM 2:")
     for x in result_matrix2:
         print(x)
@@ -437,30 +307,5 @@ if __name__ == "__main__":
     print(case)
     for x in result:
         print(x)
-    print('The resulting CAM Code for the two joined matrix: ' + code)
+    print('CAM Code: ' + code)
     print('\n\n')
-
-    ##case 3 - Checked
-    # graph11 = [['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3], ['D','A','X']]
-    # graph12 = [['B', 'C', 2], ['A', 'B', 1], ['A', 'C', 3] ,['A','D','X'],['C','E','X']]
-    #
-    # result_matrix1, result_code1 = cam.convertToMatrix(graph11)
-    # print("CAM 1:")
-    # for x in result_matrix1:
-    #     print(x)
-    # print('The resulting code for the 2d matrix: ' + result_code1)
-    # result_matrix2, result_code2 = cam.convertToMatrix(graph12)
-    # print("CAM 2:")
-    # for x in result_matrix2:
-    #     print(x)
-    # print('The resulting code for the 2d matrix: ' + result_code2)
-    # case, result, code = cam.generateCAM(result_matrix1, result_matrix2)
-    # print(case)
-    # for x in result:
-    #     print(x)
-    # print('The resulting CAM Code for the two joined matrix: ' + code)
-    # print('\n\n')
-
-
-
-
